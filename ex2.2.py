@@ -2,9 +2,8 @@
 # Exerciese 2
 # Part 2
 
-import time
-import json
-import sys
+import timeit, functools, json, sys
+import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(20000)
 def func1(arr, low, high):
@@ -29,16 +28,22 @@ def func2(array, start, end):
     array[start], array[high] = array[high], array[start]
     return high
 
-file = open("ex2.json")
-data = json.load(file)
 
-times = []
+if __name__ == "__main__":
 
-print(len(data))
+    file = open("ex2.json")
+    data = json.load(file)    
 
-for i in data:
-    t1 = time.time()
-    func1(i, 0, len(i) - 1)
-    t2 = time.time()
-    times.append(t2-t1)
+    times = []
+
+    for i in data:
+        t = timeit.Timer(functools.partial(func2, i, 0, len(i)-1))
+        times.append(t.timeit(5))
+    
+    plt.plot(times)
+    
+    plt.xlabel("Input")
+    plt.ylabel("Seconds")
+
+    plt.show()
         
